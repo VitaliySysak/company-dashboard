@@ -4,5 +4,5 @@ In order to run project
 2. open docker
 3. run file docker-run-build.bat
 4. then docker-run-prod.bat
-5. Optional, in order to use google maps api, use your own secret key in frontend
-6. frontend url http://localhost:3000/
+5. optional, in order to use google maps api, use your own secret key in frontend folder
+6. open frontend url at http://localhost:3000/
