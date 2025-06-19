@@ -5,7 +5,7 @@ COPY package*.json ./
 FROM base AS build
 ENV NODE_ENV=development
 COPY . .
-RUN npm install --legacy-peer-deps
+RUN npm install
 RUN npx prisma generate
 RUN npm run build
 
