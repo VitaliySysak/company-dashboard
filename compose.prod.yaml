@@ -1,0 +1,55 @@
+services:
+  frontend:
+    container_name: company-dashboard-frontend-prod
+    depends_on:
+      - backend
+    build:
+      context: ./company-dashboard-frontend
+      target: production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    image: bering152/company-dashboard-frontend:latest
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+
+  backend:
+    container_name: company-dashboard-backend-prod
+    depends_on:
+      db:
+        condition: service_healthy
+    build:
+      context: ./company-dashboard-backend
+    env_file:
+      - ./company-dashboard-backend/.env.production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    image: bering152/company-dashboard-backend:latest
+    restart: unless-stopped
+    ports:
+      - 5000:5000
+
+  db:
+    container_name: company-dashboard-database-prod
+    env_file:
+      - ./company-dashboard-database/.env.production
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    image: postgres:15
+    ports:
+      - "5432:5432"
+
+volumes:
+  db-data:
+    name: company-dashboard-db-data
